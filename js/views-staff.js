@@ -415,3 +415,7 @@ V.rst = function () {
     '<button class="btn" onclick="admReset()">Reset Password</button></div>');
 };
 async function admReset() { var r = await api('adminReset', T, val('x-u'), val('x-p')); if (r) { toast(r); $('x-u').value = ''; $('x-p').value = ''; } }
+
+/* Buka / tutup Post-test (durasi dari pilihan #pt-m; 0 = tanpa batas waktu) */
+async function ptOpen() { var m = parseInt(val('pt-m'), 10) || 0, r = await api('setPostTest', T, 'buka', m); if (r) { toast(r); V.jadwal(); } }
+async function ptClose() { var r = await api('setPostTest', T, 'tutup', 0); if (r) { toast(r); V.jadwal(); } }
