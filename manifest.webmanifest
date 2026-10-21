@@ -1,0 +1,2 @@
+{"name":"Training Fire & Safety Super App SHLC","short_name":"SHLC Fire Safety","start_url":"./","scope":"./","display":"standalone","orientation":"portrait","background_color":"#0b0f1a","theme_color":"#0b0f1a","lang":"id",
+ "icons":[{"src":"assets/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"assets/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
