@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0F1A">
+<title>Training Fire &amp; Safety Super App SHLC</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/icons.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/dm-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/sora-800.woff2">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/legacy.css">
+</head>
+<body class="bg-[#EEF0F5] text-on-surface antialiased min-h-screen">
+<a class="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-[90] bg-white px-3 py-2 rounded-lg" href="#M">Lompat ke konten</a>
+<div id="net" class="hide fixed top-0 inset-x-0 z-[70] bg-amber-800 text-white text-center text-xs font-bold py-1.5">Tidak ada koneksi. Menampilkan data terakhir.</div>
+
+<div id="v-login" class="min-h-screen flex flex-col bg-surface"></div>
+
+<div id="v-signup" class="hide min-h-screen flex items-center justify-center p-4 bg-[#EEF0F5]"><div class="authcard">
+  <div class="flex items-center gap-3 mb-5"><div class="w-11 h-11 rounded-xl bg-secondary-container flex items-center justify-center"><span class="material-symbols-outlined text-on-secondary">person_add</span></div><div><h2 class="font-headline-md text-headline-md text-on-surface">Daftar Akun</h2><p class="font-body-sm text-body-sm text-on-surface-variant">Lengkapi data sesuai identitas Anda.</p></div></div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+   <div><label class="lbl">Nama lengkap (sesuai KTP)</label><input class="inp" id="s-nama"></div>
+   <div><label class="lbl">Nomor Induk Karyawan</label><input class="inp" id="s-nik"></div>
+   <div><label class="lbl">Tanggal lahir</label><input class="inp" id="s-tgl" type="date"></div>
+   <div><label class="lbl">Unit kerja</label><div id="s-unit-w"><input class="inp" id="s-unit"></div></div>
+   <div><label class="lbl">No. WhatsApp (awali +62)</label><input class="inp" id="s-wa" type="tel" placeholder="+6281234567890" onblur="this.value=normWa(this.value)"></div>
+   <div><label class="lbl">Email</label><input class="inp" id="s-email" type="email"></div>
+   <div id="s-user-w"><label class="lbl">Username</label><input class="inp" id="s-user" autocomplete="username" autocapitalize="none"></div>
+   <div id="s-pass-w"><label class="lbl">Password (min. 8 karakter)</label><input class="inp" id="s-pass" type="password" autocomplete="new-password"></div>
+  </div>
+  <label class="flex items-start gap-2 mt-4 text-[13px] text-on-surface-variant leading-relaxed"><input type="checkbox" id="s-setuju" class="mt-1 rounded border-[#D6DBE8] text-secondary focus:ring-secondary/30"> <span id="s-setuju-t"></span></label>
+  <button class="btn-p w-full mt-5" onclick="signup()">Daftar</button>
+  <button class="w-full mt-3 text-[14px] font-bold text-secondary" onclick="show('v-login')">Kembali ke login</button>
+</div></div>
+<div id="v-forgot" class="hide min-h-screen flex items-center justify-center p-4 bg-[#EEF0F5]"><div class="authcard" style="max-width:440px">
+  <h2 class="font-headline-md text-headline-md text-on-surface">Lupa Password</h2><p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Tautan reset dikirim ke email terdaftar.</p>
+  <label class="lbl">Email</label><input class="inp" id="f-email" type="email"><button class="btn-p w-full mt-4" onclick="forgot()">Kirim tautan</button><button class="w-full mt-3 text-[14px] font-bold text-secondary" onclick="show('v-login')">Kembali</button>
+</div></div>
+<div id="v-reset" class="hide min-h-screen flex items-center justify-center p-4 bg-[#EEF0F5]"><div class="authcard" style="max-width:440px">
+  <h2 class="font-headline-md text-headline-md text-on-surface mb-4">Atur Password Baru</h2><label class="lbl">Password baru (min. 8 karakter)</label><input class="inp" id="r-p" type="password"><button class="btn-p w-full mt-4" onclick="reset()">Simpan</button>
+</div></div>
+<div id="v-verify" class="hide min-h-screen flex items-center justify-center p-4 bg-[#EEF0F5]"><div class="authcard" style="max-width:480px">
+  <img src="assets/logo-siloam.png" alt="Siloam" class="h-8 mb-4"><div id="vf-box"></div><button class="w-full mt-4 h-11 rounded-xl border border-[#D6DBE8] font-bold text-[14px] hover:border-on-surface" onclick="leaveVerify()">Tutup</button>
+</div></div>
+
+<div id="v-app" class="hide">
+ <aside class="hidden lg:flex fixed left-0 top-0 h-full w-24 bg-primary-container z-50 flex-col items-center py-4 justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+  <div class="flex flex-col items-center w-full min-h-0">
+   <div class="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary shadow-[0_8px_20px_rgba(217,72,15,0.25)] mb-4 shrink-0"><span class="material-symbols-outlined text-[28px]">local_fire_department</span></div>
+   <div class="w-8 h-px bg-outline-variant/30 mb-3 shrink-0"></div>
+   <nav id="side" class="flex flex-col items-center gap-2 w-full px-2 overflow-y-auto" aria-label="Menu utama"></nav>
+  </div>
+  <div class="flex flex-col items-center gap-2 mb-2"><button type="button" title="Keluar" aria-label="Keluar" onclick="logout()" class="w-12 h-12 rounded-xl flex items-center justify-center text-on-primary-container hover:bg-surface-variant hover:text-on-surface transition-all"><span class="material-symbols-outlined text-[20px]">logout</span></button></div>
+ </aside>
+ <nav id="bnav" class="lg:hidden fixed bottom-0 inset-x-0 h-16 bg-primary-container z-50 flex items-stretch px-1 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_16px_rgba(0,0,0,.18)]" aria-label="Menu utama"></nav>
+ <div class="lg:pl-24 min-h-screen flex flex-col justify-between pb-16 lg:pb-0">
+  <header class="fixed top-0 left-0 lg:left-24 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl z-40 flex items-center justify-between px-4 lg:px-gutter shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-[#D6DBE8]">
+   <div class="flex items-center gap-space-md min-w-0">
+    <div class="flex flex-col min-w-0"><span class="font-title-md text-title-md text-on-surface leading-none truncate"><span class="hidden sm:inline">Siloam Hospitals Lippo Cikarang</span><span class="sm:hidden" id="pt">SHLC</span></span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mt-1 truncate hidden sm:block">Fire &amp; Safety Command Center &bull; <span id="bc">SHLC</span></span></div>
+    <div class="hidden lg:block h-6 w-px bg-surface-container-high mx-2"></div>
+    <div class="hidden lg:flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-full"><span class="w-2.5 h-2.5 rounded-full bg-secondary-container animate-pulse"></span><span class="font-label-sm text-label-sm text-on-surface uppercase">Sistem Siaga Aktif</span></div>
+   </div>
+   <div class="flex items-center gap-space-md">
+    <div class="hidden md:flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-lg text-on-surface-variant"><span class="material-symbols-outlined text-[18px]">shield</span><span class="font-label-sm text-label-sm uppercase text-on-surface">K3RS Accredited</span></div>
+    <div class="hidden sm:block h-8 w-px bg-surface-container-high"></div>
+    <div class="flex items-center gap-3 pl-2">
+     <div class="hidden sm:flex flex-col text-right"><span class="font-body-md-medium text-body-md-medium text-on-surface leading-tight" id="hd-name"></span><span class="font-label-sm text-label-sm text-secondary uppercase" id="hd-role"></span></div>
+     <div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white text-[12px] font-bold" id="hd-av"></div>
+     <button type="button" class="lg:hidden p-2 text-on-surface-variant" onclick="logout()" aria-label="Keluar"><span class="material-symbols-outlined">logout</span></button>
+    </div>
+   </div>
+  </header>
+  <main id="M" class="relative pt-16 w-full flex-1 bg-[#EEF0F5]" role="main"></main>
+  <footer id="ft" class="w-full bg-surface-container-lowest py-space-md px-4 lg:px-gutter shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+   <div class="w-full flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left font-body-sm text-body-sm text-on-surface-variant">
+    <div class="flex flex-col sm:flex-row items-center gap-2"><img src="assets/logo-siloam.png" alt="Siloam" class="h-6 w-auto"><span class="font-body-md-medium text-body-md-medium text-on-surface">Siloam Hospitals Lippo Cikarang</span><span class="hidden sm:inline">&bull; Fire Safety &amp; Disaster Preparedness Division</span></div>
+    <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-space-md"><span class="flex items-center gap-2"><img src="assets/logo-api.png" alt="Fire &amp; Safety" class="h-5 w-5"><span class="font-label-sm text-label-sm uppercase text-on-surface-variant">Dibuat oleh <strong class="text-on-surface">dr. Ferry Hidayat</strong> (Ketua Komite K3)</span></span><span class="hidden sm:inline">&bull;</span><span>Training Fire &amp; Safety Super App SHLC</span></div>
+   </div>
+  </footer>
+ </div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="js/config.js"></script>
+<script src="js/qrcode.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/core.js"></script>
+<script src="js/tpl.js"></script>
+<script src="js/dom.js"></script>
+<script src="js/views-user.js"></script>
+<script src="js/views-staff.js"></script>
+<script src="js/views-modules.js"></script>
+<script src="js/views-stitch.js"></script>
+<script src="js/views-stitch2.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
